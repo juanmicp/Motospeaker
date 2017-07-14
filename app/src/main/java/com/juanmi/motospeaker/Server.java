@@ -3,6 +3,10 @@ package com.juanmi.motospeaker;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.media.AudioFormat;
+import android.media.AudioManager;
+import android.media.AudioRecord;
+import android.media.AudioTrack;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -55,6 +59,29 @@ public class Server extends Thread {
 
     public void run() {
 
+        int sampleRate = 16000;
+        int channelConfig = AudioFormat.CHANNEL_OUT_MONO;
+        int encoding = AudioFormat.ENCODING_PCM_16BIT;
+        int minBufferSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig, encoding);
+
+        while (true){
+            byte[] buffer = new byte[minBufferSize];
+            try {
+                InputStream in = socket.getInputStream();
+                in.read(buffer);
+                AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig, encoding, minBufferSize, AudioTrack.MODE_STREAM);
+                audioTrack.write(buffer, 0, buffer.length);
+                audioTrack.play();
+                audioTrack.stop();
+                audioTrack.release();
+
+            } catch (Exception e) {
+                Log.d("Server", "Could not read: " + e.toString());
+                break;
+            }
+        }
+
+        /*
         String oldText = "";
         while (true) {
             byte[] buffer = new byte[1024];
@@ -79,6 +106,7 @@ public class Server extends Thread {
                 break;
             }
         }
+        */
     }
 
     public void cancel() {

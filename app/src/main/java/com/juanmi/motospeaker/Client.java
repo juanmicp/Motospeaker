@@ -2,6 +2,9 @@ package com.juanmi.motospeaker;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.media.AudioFormat;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -15,7 +18,7 @@ import java.util.UUID;
  * Created by Juanmi on 25/05/2017.
  */
 
-public class Client {
+public class Client extends Thread{
 
     private BluetoothSocket socket;
     private OutputStream out;
@@ -61,20 +64,25 @@ public class Client {
         }
     }
 
-    public void send(String toSend) {
-        try {
-            out.write(toSend.getBytes());
-        } catch (IOException e) {
-            Log.d("Client", "Could not write: " + e.toString());
-        }
+    public void run() {
+        //Preparando el streaming.
+        AudioRecord recorder;
+        int sampleRate = 16000;
+        int channelConfig = AudioFormat.CHANNEL_OUT_MONO;
+        int encoding = AudioFormat.ENCODING_PCM_16BIT;
+        int minBufferSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig, encoding);
+        byte[] buffer = new byte[minBufferSize];
+        recorder = new AudioRecord(MediaRecorder.AudioSource.MIC,sampleRate,channelConfig,encoding,minBufferSize*10);
+        recorder.startRecording();
 
-        /*
-        try {
-            socket.close();
-        } catch (IOException e) {
-            Log.d("Client", "In run: Could not close connection:" + e.toString());
+        while (true){ //Bucle infinito de envío de audio.
+            recorder.read(buffer, 0, buffer.length);
+            try {
+                out.write(buffer);
+            } catch (IOException e) {
+                Log.d("Client", "Could not write: " + e.toString());
+            }
         }
-        */
     }
 
     public void cancel() {
