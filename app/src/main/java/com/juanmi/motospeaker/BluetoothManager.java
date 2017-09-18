@@ -67,18 +67,21 @@ public class BluetoothManager {
             btClient = new Client(btSocket);
             btServer.start();
             conectado = true;
+            btClient.start();
         }else{ //Conexión en la parte cliente.
             btClient = new Client(btDevToConnect.getDevice(), uuid);
             btSocket = btClient.getSocket();
             btServer = new Server(btSocket);
             btServer.start();
             conectado = true;
+            btClient.start();
+
         }
         return conectado;
     }
 
     public void sendText (String text){
-        btClient.send(text);
+        //btClient.send(text);
     }
 
     private List<BtDevice> getAvailableDevices() { //Devuelve los dispositivos asociados.
