@@ -17,13 +17,21 @@ public class CommunicateActivity extends AppCompatActivity {
         endCallButton = (Button) findViewById(R.id.endCallButton);
         endCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) { //Cuando se pulsa, se delega en el mánager para finalizar conversación.
+            public void onClick(View view) { //Cuando se pulsa, se delega en el mánager para finalizar conversación y seguidamente se cierra la aplicación.
                 BluetoothManager.getInstance().endConnection();
-                Intent intent = new Intent(view.getContext(), MainActivity.class);
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                android.os.Process.killProcess(android.os.Process.myPid());
             }
         });
         connect();
+    }
+
+    @Override
+    public void onBackPressed() {
+        //Cuando pulsa el botón atrás no vuelve a la activity principal para evitar situaciones de excepción.
     }
 
     private void connect(){ //Conectar con el dispositivo seleccionado.

@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
             t.show();
             System.exit(0);
         }
-
         if (!btAdapter.isEnabled()) { //Si el bluetooth no está activado, se activa. Para activarse, pregunta al usuario si permite esa acción.
             Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBT, 1);

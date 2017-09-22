@@ -90,5 +90,6 @@ public class BluetoothManager {
         btClient.cancel();
         btServer.cancel();
         btDevToConnect = null;
+        btAdapter.disable();
     }
 }
