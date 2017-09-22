@@ -24,8 +24,7 @@ public class Server extends Thread {
 
     private BluetoothServerSocket serverSocket;
     private BluetoothSocket socket = null;
-    private EditText etToReceive;
-    String text;
+    private InputStream in;
 
     public Server (BluetoothAdapter bluetoothAdapter, String uuid) { //Constructor para el que ejerce de servidor en el momento de la conexión.
         try {
@@ -67,7 +66,6 @@ public class Server extends Thread {
         AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig, encoding, minBufferSize, AudioTrack.MODE_STREAM);
         audioTrack.play(); //A partir de ahora reproducirá lo que dicte el método write().
         byte[] buffer = new byte[minBufferSize];
-        InputStream in;
         while (true){ //Bucle de recepción.
             try {
                 in = socket.getInputStream();
@@ -116,7 +114,10 @@ public class Server extends Thread {
 
     public void cancel() {
         try {
-            socket.close();
+            if (in != null)
+                in.close();
+            if (socket != null)
+                socket.close();
         } catch (IOException e) {
             Log.d("Server", "Could not close the connected socket: " + e.toString());
         }
@@ -124,14 +125,6 @@ public class Server extends Thread {
 
     public BluetoothSocket getSocket(){
         return socket;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setEtToReceive(EditText etToReceive) {
-        this.etToReceive = etToReceive;
     }
 
 }

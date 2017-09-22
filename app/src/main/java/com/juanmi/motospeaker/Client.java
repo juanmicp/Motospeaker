@@ -99,7 +99,10 @@ public class Client extends Thread{
 
     public void cancel() {
         try {
-            socket.close();
+            if (out != null)
+                out.close();
+            if (socket != null)
+                socket.close();
         } catch (IOException e) {
             Log.d("Client", "Could not close the client connection:" + e.toString());
         }

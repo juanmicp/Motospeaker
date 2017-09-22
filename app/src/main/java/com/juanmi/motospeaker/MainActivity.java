@@ -39,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
         btm.createBtAdapter();
         BluetoothAdapter btAdapter = btm.getBtAdapter();
 
-        btAdapter = BluetoothAdapter.getDefaultAdapter();
-
         if (btAdapter == null) { //Si nuestro dispositivo no soporta bluetooth, se cierra la aplicación.
             Toast t = Toast.makeText(getApplicationContext(), "Adaptador Bluetooth no soportado.", Toast.LENGTH_SHORT);
             t.show();
@@ -50,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
         if (!btAdapter.isEnabled()) { //Si el bluetooth no está activado, se activa. Para activarse, pregunta al usuario si permite esa acción.
             Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBT, 1);
-            Toast t = Toast.makeText(getApplicationContext(), "Bluetooth habilitado.", Toast.LENGTH_SHORT);
-            t.show();
+            //Toast t = Toast.makeText(getApplicationContext(), "Bluetooth habilitado.", Toast.LENGTH_SHORT);
+            //t.show();
         }
         devicesLV = (ListView)findViewById(R.id.devicesLV);
         adapter = new ArrayAdapter<BtDevice>(this, android.R.layout.simple_list_item_1, btDevList);
@@ -86,12 +84,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void makeVisible (View view){
-        if (BluetoothManager.getInstance().getBtAdapter().isEnabled()){
+        BluetoothAdapter btAdapter = BluetoothManager.getInstance().getBtAdapter();
+        if (btAdapter.isEnabled()){
             Intent visibleBt = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
             visibleBt.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 120);
             startActivity(visibleBt);
             //
-            while (BluetoothManager.getInstance().getBtAdapter().getScanMode() != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE){}
+            while (btAdapter.getScanMode() != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE){}
             Intent intent = new Intent(view.getContext(), CommunicateActivity.class);
             startActivity(intent);
         }
