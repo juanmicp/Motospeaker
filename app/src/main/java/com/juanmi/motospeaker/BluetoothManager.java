@@ -22,13 +22,14 @@ import static android.R.attr.action;
 
 public class BluetoothManager {
 
+    private static BluetoothManager instance = null;
     private BluetoothAdapter btAdapter;
     private List<BtDevice> btDevList = new ArrayList();
-    private static BluetoothManager instance = null;
     private String uuid = "00001101-0000-1000-8000-00805f9b34fb";
     private Server btServer;
     private Client btClient;
     private BtDevice btDevToConnect = null;
+    private boolean conectado = false;
 
     private BluetoothManager() {
     }
@@ -49,15 +50,14 @@ public class BluetoothManager {
     }
 
     public boolean connect() { //Conexión.
-        boolean conectado = false;
         BluetoothSocket btSocket = null;
         if (btDevToConnect == null){ //Conexión en la parte servidora.
             btServer = new Server(btAdapter, uuid);
+            btServer.start();
             while (btSocket == null){
                 btSocket = btServer.getSocket();
             }
             btClient = new Client(btSocket);
-            btServer.start();
             btClient.start();
             conectado = true;
         }else{ //Conexión en la parte cliente.
@@ -72,7 +72,7 @@ public class BluetoothManager {
         return conectado;
     }
 
-    private List<BtDevice> getAvailableDevices() { //Devuelve los dispositivos asociados.
+    private List<BtDevice> getAvailableDevices() { //Devuelve los dispositivos asociados por un enlace previo.
         List<BtDevice> availableDevices = new ArrayList();
         Set<BluetoothDevice> devs = btAdapter.getBondedDevices();
         for (BluetoothDevice dev : devs) {
@@ -86,10 +86,15 @@ public class BluetoothManager {
         this.btDevToConnect = btDevToConnect;
     }
 
+    public boolean getConectado (){
+        return conectado;
+    }
+
     public void endConnection() {
         btClient.cancel();
         btServer.cancel();
         btDevToConnect = null;
+        conectado = false;
         btAdapter.disable();
     }
 }

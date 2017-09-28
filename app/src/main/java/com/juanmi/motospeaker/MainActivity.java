@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(visibleBt);
             //
             while (btAdapter.getScanMode() != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE){}
-            Intent intent = new Intent(view.getContext(), CommunicateActivity.class);
+            Intent intent = new Intent(view.getContext(), WaitingAreaActivity.class);
             startActivity(intent);
         }
         else{

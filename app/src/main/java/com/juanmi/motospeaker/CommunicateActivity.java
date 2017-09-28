@@ -30,9 +30,7 @@ public class CommunicateActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        //Cuando pulsa el botón atrás no vuelve a la activity principal para evitar situaciones de excepción.
-    }
+    public void onBackPressed() { }
 
     private void connect(){ //Conectar con el dispositivo seleccionado.
         BluetoothManager btManager = BluetoothManager.getInstance();

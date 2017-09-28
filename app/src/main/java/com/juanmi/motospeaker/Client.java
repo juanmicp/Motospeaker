@@ -69,9 +69,9 @@ public class Client extends Thread{
         //Preparando el streaming.
         AudioRecord recorder;
         //int sampleRate = 8000;
-        //int sampleRate = 44100;
+        int sampleRate = 44100;
         //int sampleRate = 16000;
-        int sampleRate = 48000; //Con 16000 se escucha aunque también mucho ruido. Parece que el dispositivo más potente satura al otro con tanto envío de audio.
+        //int sampleRate = 48000; //Con 16000 se escucha aunque también mucho ruido. Parece que el dispositivo más potente satura al otro con tanto envío de audio.
         int channelConfig = AudioFormat.CHANNEL_IN_MONO;
         int encoding = AudioFormat.ENCODING_PCM_16BIT;
         int minBufferSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig, encoding);
@@ -84,15 +84,16 @@ public class Client extends Thread{
             recorder.read(buffer, 0, buffer.length);
             try {
                 out.write(buffer); //Se manda el buffer con el audio al servidor.
+                out.flush();
             } catch (IOException e) {
                 Log.d("Client", "Could not write: " + e.toString());
             }
-
+            /*
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
+            }*/
 
         }
     }
