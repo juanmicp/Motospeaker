@@ -23,8 +23,7 @@ import java.util.UUID;
 
 public class Server extends Thread {
 
-    private BluetoothServerSocket serverSocket;
-    private BluetoothSocket socket = null;
+    private BluetoothSocket socket;
     private InputStream in;
     private BluetoothAdapter bluetoothAdapter;
     private String uuid;
@@ -42,6 +41,7 @@ public class Server extends Thread {
     public void run() {
 
         if (socket == null) {
+            BluetoothServerSocket serverSocket = null;
             try {
                 serverSocket = bluetoothAdapter.listenUsingRfcommWithServiceRecord("Motospeaker", UUID.fromString(uuid));
             } catch (IOException e) {

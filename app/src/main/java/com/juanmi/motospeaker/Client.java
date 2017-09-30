@@ -22,34 +22,43 @@ public class Client extends Thread{
 
     private BluetoothSocket socket;
     private OutputStream out;
+    private BluetoothDevice device;
+    private String uuid;
 
     public Client (BluetoothDevice device, String uuid) { //Constructor que usa el que haga de cliente al establecer la conexión.
-        BluetoothSocket tmp = null;
-        try {
-            tmp = device.createRfcommSocketToServiceRecord(UUID.fromString(uuid));
-        } catch (IOException e) {
-            Log.d("Client","Could not create RFCOMM socket:" + e.toString());
-            return;
-        }
-        socket = tmp;
-
-        try {
-            socket.connect();
-            this.out=socket.getOutputStream();
-        }
-        catch (IOException e) {
-            Log.d("Client","Could not connect: " + e.toString());
-            try {
-                socket.close();
-            } catch (IOException e2) {
-                Log.d("Client", "Could not close connection:" + e.toString());
-                return;
-            }
-        }
+        this.device = device;
+        this.uuid = uuid;
     }
 
     public Client (BluetoothSocket socket) { //Para el que hace de servidor a la hora de conectar.
         this.socket = socket;
+    }
+
+    public void run() {
+
+        //Preparando la conexión.
+        if (socket == null) {
+            BluetoothSocket tmp = null;
+            try {
+                tmp = device.createRfcommSocketToServiceRecord(UUID.fromString(uuid));
+            } catch (IOException e) {
+                Log.d("Client", "Could not create RFCOMM socket:" + e.toString());
+                return;
+            }
+            this.socket = tmp;
+
+            try {
+                socket.connect();
+            } catch (IOException e) {
+                Log.d("Client", "Could not connect: " + e.toString());
+                try {
+                    socket.close();
+                } catch (IOException e2) {
+                    Log.d("Client", "Could not close connection:" + e.toString());
+                    return;
+                }
+            }
+        }
         try {
             this.out = this.socket.getOutputStream();
         }
@@ -62,9 +71,7 @@ public class Client extends Thread{
                 return;
             }
         }
-    }
 
-    public void run() {
 
         //Preparando el streaming.
         AudioRecord recorder;

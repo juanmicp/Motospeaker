@@ -26,7 +26,13 @@ public class CommunicateActivity extends AppCompatActivity {
                 android.os.Process.killProcess(android.os.Process.myPid());
             }
         });
-        connect();
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                connect();
+            }
+        }).start();
     }
 
     @Override

@@ -62,10 +62,12 @@ public class BluetoothManager {
             conectado = true;
         }else{ //Conexión en la parte cliente.
             btClient = new Client(btDevToConnect.getDevice(), uuid);
-            btSocket = btClient.getSocket();
+            btClient.start();
+            while (btSocket == null){
+                btSocket = btClient.getSocket();
+            }
             btServer = new Server(btSocket);
             btServer.start();
-            btClient.start();
             conectado = true;
 
         }
