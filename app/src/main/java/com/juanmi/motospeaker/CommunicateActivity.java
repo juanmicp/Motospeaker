@@ -26,23 +26,10 @@ public class CommunicateActivity extends AppCompatActivity {
                 android.os.Process.killProcess(android.os.Process.myPid());
             }
         });
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                connect();
-            }
-        }).start();
     }
 
     @Override
     public void onBackPressed() { }
 
-    private void connect(){ //Conectar con el dispositivo seleccionado.
-        BluetoothManager btManager = BluetoothManager.getInstance();
-        if (!btManager.connect()){ //Si no puede conectar con el dispositivo en cuestión.
-            Toast.makeText(getBaseContext(), "Imposible conectar.", Toast.LENGTH_SHORT).show();
-        }
-    }
 }
 

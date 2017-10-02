@@ -3,16 +3,9 @@ package com.juanmi.motospeaker;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.widget.EditText;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import static android.R.attr.action;
 
@@ -60,6 +53,7 @@ public class BluetoothManager {
             btClient = new Client(btSocket);
             btClient.start();
             conectado = true;
+
         }else{ //Conexión en la parte cliente.
             btClient = new Client(btDevToConnect.getDevice(), uuid);
             btClient.start();

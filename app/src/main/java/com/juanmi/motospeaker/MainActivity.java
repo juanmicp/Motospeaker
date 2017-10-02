@@ -61,7 +61,12 @@ public class MainActivity extends AppCompatActivity {
                 BtDevice btd = (BtDevice) devicesLV.getItemAtPosition(i);
                 btd.setConnected(true);
                 btm.setBtDevToConnect(btd);
-                Toast.makeText(getBaseContext(), "Conectando con "+ btd.getName()+"...", Toast.LENGTH_SHORT).show();
+                if (btm.connect()){ //Si no puede conectar con el dispositivo en cuestión.
+                    Toast.makeText(getBaseContext(), "Conectando con "+ btd.getName()+"...", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getBaseContext(), "Imposible conectar.", Toast.LENGTH_SHORT).show();
+                }
                 Intent intent = new Intent(view.getContext(), CommunicateActivity.class);
                 startActivity(intent);
             }
