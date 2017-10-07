@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static android.R.attr.action;
 
 /**
  * Created by Juanmi on 22/05/2017.

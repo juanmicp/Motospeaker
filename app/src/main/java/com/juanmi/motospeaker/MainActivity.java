@@ -4,24 +4,18 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.nio.BufferOverflowException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.attr.action;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
         if (!btAdapter.isEnabled()) { //Si el bluetooth no está activado, se activa. Para activarse, pregunta al usuario si permite esa acción.
             Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBT, 1);
-            //Toast t = Toast.makeText(getApplicationContext(), "Bluetooth habilitado.", Toast.LENGTH_SHORT);
-            //t.show();
         }
         devicesLV = (ListView)findViewById(R.id.devicesLV);
         adapter = new ArrayAdapter<BtDevice>(this, android.R.layout.simple_list_item_1, btDevList);
